@@ -1,0 +1,11 @@
+../Core/Src/main.c:76:5:main	8	static
+../Core/Src/main.c:130:6:SystemClock_Config	88	static
+../Core/Src/main.c:171:6:system_init	8	static
+../Core/Src/main.c:183:6:test_LedDebug	8	static
+../Core/Src/main.c:190:6:test_7seg	8	static
+../Core/Src/main.c:196:6:test_button	16	static
+../Core/Src/main.c:205:6:updateTime	8	static
+../Core/Src/main.c:215:9:isButtonUp	4	static
+../Core/Src/main.c:222:9:isButtonDown	4	static
+../Core/Src/main.c:229:6:displayTime	24	static
+../Core/Src/main.c:244:6:Error_Handler	4	static,ignoring_inline_asm
