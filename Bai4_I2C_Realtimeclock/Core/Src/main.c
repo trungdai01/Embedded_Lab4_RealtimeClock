@@ -28,11 +28,12 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "software_timer.h"
-#include "led_7seg.h"
-#include "button.h"
-#include "lcd.h"
-#include "picture.h"
-#include "ds3231.h"
+#include "global.h"
+// #include "led_7seg.h"
+// #include "button.h"
+// #include "lcd.h"
+// #include "picture.h"
+// #include "ds3231.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -108,6 +109,8 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
  lcd_Clear(BLACK);
+ initTime();
+ init_value();
  updateTime();
   while (1)
   {
@@ -115,7 +118,7 @@ int main(void)
 	  flag_timer2 = 0;
 	  button_Scan();
 	  ds3231_ReadTime();
-	  displayTime();
+	  // displayTime();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -203,13 +206,13 @@ void test_button(){
 }
 
 void updateTime(){
-	ds3231_Write(ADDRESS_YEAR, 23);
-	ds3231_Write(ADDRESS_MONTH, 10);
-	ds3231_Write(ADDRESS_DATE, 20);
-	ds3231_Write(ADDRESS_DAY, 6);
-	ds3231_Write(ADDRESS_HOUR, 20);
-	ds3231_Write(ADDRESS_MIN, 11);
-	ds3231_Write(ADDRESS_SEC, 23);
+	ds3231_Write(ADDRESS_YEAR, YEAR);
+	ds3231_Write(ADDRESS_MONTH, MONTH);
+	ds3231_Write(ADDRESS_DATE, DATE);
+	ds3231_Write(ADDRESS_DAY, DAY);
+	ds3231_Write(ADDRESS_HOUR, HOUR);
+	ds3231_Write(ADDRESS_MIN, MIN);
+	ds3231_Write(ADDRESS_SEC, SEC);
 }
 
 uint8_t isButtonUp()
@@ -225,15 +228,6 @@ uint8_t isButtonDown()
         return 1;
     else
         return 0;
-}
-void displayTime(){
-	lcd_ShowIntNum(70, 100, ds3231_hours, 2, GREEN, BLACK, 24);
-	lcd_ShowIntNum(110, 100, ds3231_min, 2, GREEN, BLACK, 24);
-	lcd_ShowIntNum(150, 100, ds3231_sec, 2, GREEN, BLACK, 24);
-	lcd_ShowIntNum(20, 130, ds3231_day, 2, YELLOW, BLACK, 24);
-	lcd_ShowIntNum(70, 130, ds3231_date, 2, YELLOW, BLACK, 24);
-	lcd_ShowIntNum(110, 130, ds3231_month, 2, YELLOW, BLACK, 24);
-	lcd_ShowIntNum(150, 130, ds3231_year, 2, YELLOW, BLACK, 24);
 }
 /* USER CODE END 4 */
 

@@ -20,13 +20,13 @@ uint8_t ds3231_month;
 uint8_t ds3231_year;
 
 void ds3231_init(){
-	ds3231_buffer[0] = DEC2BCD(30); //second
-	ds3231_buffer[1] = DEC2BCD(22); //minute
-	ds3231_buffer[2] = DEC2BCD(21); //hour
-	ds3231_buffer[3] = DEC2BCD(6);  //day
-	ds3231_buffer[4] = DEC2BCD(15); //date
-	ds3231_buffer[5] = DEC2BCD(9);  //month
-	ds3231_buffer[6] = DEC2BCD(23); //year
+	ds3231_buffer[0] = DEC2BCD(30); //second,	0011 0000
+	ds3231_buffer[1] = DEC2BCD(22); //minute,	0010 0010
+	ds3231_buffer[2] = DEC2BCD(21); //hour,		0010 0001
+	ds3231_buffer[3] = DEC2BCD(6);  //day,		0000 0110
+	ds3231_buffer[4] = DEC2BCD(15); //date,		0001 0101
+	ds3231_buffer[5] = DEC2BCD(9);  //month,	0000 1001
+	ds3231_buffer[6] = DEC2BCD(23); //year,		0010 0011
 	if(HAL_I2C_IsDeviceReady(&hi2c1, DS3231_ADDRESS, 3, 50) != HAL_OK){
 		while(1);
 	};

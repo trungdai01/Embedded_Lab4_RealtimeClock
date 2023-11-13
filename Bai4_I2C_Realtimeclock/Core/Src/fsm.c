@@ -8,28 +8,28 @@
 #include "fsm.h"
 void fsm_clock()
 {
-    switch(MODE)
+    if (mode == MODE1)
     {
-        case INIT:
-            break;
-        case NORMAL:
-            break;
-        case EDIT_HOUR:
-            break;
-        case EDIT_MIN:
-            break;
-        case EDIT_SEC:
-            break;
-        case SET_TIMER_HOUR:
-            break;
-        case SET_TIMER_MIN:
-            break;
-        case SET_TIMER_SEC:
-            break;
-        case SAVE_SETTING:
-            break;
-        default:
-            break;
+    }
+    if (mode == MODE2)
+    {
+    }
+    if (mode == MODE3)
+    {
+    }
+    if (mode == MODE4)
+    {
+    }
+    if (mode == MODE5)
+    {
+    }
+    if (mode == MODE6)
+    {
+    }
+    if (mode == MODE7)
+    {
+    }
+    if (mode == MODE8)
+    {
     }
 }
-
