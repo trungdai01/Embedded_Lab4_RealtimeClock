@@ -24,67 +24,67 @@
 #define MODE7 7
 #define MODE8 8
 
-#define NUM_OF_BUT 4
-#define BUTTON1 0
-#define BUTTON2 1
-#define BUTTON3 2
-#define BUTTON4 3
+#define ALARM_MODE1 10
+#define ALARM_MODE2 11
+#define ALARM_MODE3 12
 
 #define INIT 0
 #define NORMAL 1
 
-#define EDIT_HOUR 2
-#define EDIT_MIN 3
-#define EDIT_SEC 4
-
-#define SAVE_SETTING 5
+#define HOUR	1
+#define MIN		2
+#define SEC		3
+#define DAY		4
+#define DATE	5
+#define MONTH	6
+#define YEAR	7
+#define HOUR_A  10
+#define MIN_A   11
+#define SEC_A   12
 
 extern int statusNORMAL_1;
 extern int statusNORMAL_2;
+
 extern int statusSEC_1; // Blink seconds
 extern int statusSEC_2; // Increase
-extern int statusSEC_3; // Decrease
-extern int statusSEC_4; // Save setting
+extern int statusSEC_3; // Save setting
 
-extern int statusMIN_1;
-extern int statusMIN_2;
+extern int statusMIN_1; // Blink min
+extern int statusMIN_2; // Increase
 extern int statusMIN_3;
-extern int statusMIN_4;
 
 extern int statusHOUR_1;
 extern int statusHOUR_2;
 extern int statusHOUR_3;
-extern int statusHOUR_4;
 
 extern int statusDAY_1;
 extern int statusDAY_2;
 extern int statusDAY_3;
-extern int statusDAY_4;
 
 extern int statusDATE_1;
 extern int statusDATE_2;
 extern int statusDATE_3;
-extern int statusDATE_4;
 
 extern int statusMONTH_1;
 extern int statusMONTH_2;
 extern int statusMONTH_3;
-extern int statusMONTH_4;
 
 extern int statusYEAR_1;
 extern int statusYEAR_2;
 extern int statusYEAR_3;
-extern int statusYEAR_4;
+
+extern int statusNORMAL_ALARM;
+
+extern int statusHOUR_ALARM_1;
+extern int statusHOUR_ALARM_2;
+extern int statusHOUR_ALARM_3;
+
+extern int statusMIN_ALARM_1;
+extern int statusMIN_ALARM_2;
+extern int statusMIN_ALARM_3;
 
 extern int mode;
-
-extern int SEC;
-extern int MIN;
-extern int HOUR;
-extern int DAY;
-extern int DATE;
-extern int MONTH;
-extern int YEAR0;
+extern int mode_alarm;
 
 extern uint8_t counterSec;
 extern uint8_t counterMin;
@@ -93,10 +93,28 @@ extern uint8_t counterDay;
 extern uint8_t counterDate;
 extern uint8_t counterMonth;
 extern uint8_t counterYear;
+extern uint8_t counterHour_Alarm;
+extern uint8_t counterMin_Alarm;
+extern uint8_t counterSec_Alarm;
+extern uint8_t counter_blink1;
+extern uint8_t counter_blink2;
 
-void initTime();
+extern uint8_t counter_alert1;
+extern uint8_t counter_alert2;
+
+extern uint8_t saveTime[7];
+
 void init_value();
-void blinky();
+void init_counter();
+void init_counter_alarm();
+void blinky(int);
+void blinkyAlarm(int);
 void displayTime();
+void displayAlarm();
+void updateTime();
+void updateAlarm();
+void alert();
+void resetSaveTime();
+void writeSaveTime();
 
 #endif /* INC_GLOBAL_H_ */

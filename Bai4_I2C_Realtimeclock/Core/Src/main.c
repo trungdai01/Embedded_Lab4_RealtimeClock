@@ -1,21 +1,21 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2023 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * <h2><center>&copy; Copyright (c) 2023 STMicroelectronics.
+ * All rights reserved.</center></h2>
+ *
+ * This software component is licensed by ST under BSD 3-Clause license,
+ * the "License"; You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at:
+ *                        opensource.org/licenses/BSD-3-Clause
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -24,11 +24,12 @@
 #include "tim.h"
 #include "gpio.h"
 #include "fsmc.h"
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "software_timer.h"
 #include "global.h"
+#include "fsm.h"
+#include "fsm_alarm.h"
 // #include "led_7seg.h"
 // #include "button.h"
 // #include "lcd.h"
@@ -61,8 +62,8 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 void system_init();
 void test_LedDebug();
-void displayTime();
-void updateTime();
+// void displayTime();
+// void updateTime();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -71,9 +72,9 @@ void updateTime();
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -108,17 +109,18 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
- lcd_Clear(BLACK);
- initTime();
- init_value();
- updateTime();
+  lcd_Clear(BLACK);
+  init_value();
+  updateTime();
+  updateAlarm();
   while (1)
   {
-	  while(!flag_timer2);
-	  flag_timer2 = 0;
-	  button_Scan();
-	  ds3231_ReadTime();
-	  // displayTime();
+    while (!flag_timer2)
+      ;
+    flag_timer2 = 0;
+    button_Scan();
+    fsm_clock();
+    fsm_alarm();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -127,21 +129,21 @@ int main(void)
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
-  */
+   */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
   /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
+   * in the RCC_OscInitTypeDef structure.
+   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
@@ -156,9 +158,8 @@ void SystemClock_Config(void)
     Error_Handler();
   }
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+   */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
@@ -171,70 +172,77 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void system_init(){
-	  HAL_GPIO_WritePin(OUTPUT_Y0_GPIO_Port, OUTPUT_Y0_Pin, 0);
-	  HAL_GPIO_WritePin(OUTPUT_Y1_GPIO_Port, OUTPUT_Y1_Pin, 0);
-	  HAL_GPIO_WritePin(DEBUG_LED_GPIO_Port, DEBUG_LED_Pin, 0);
-	  timer_init();
-	  led7_init();
-	  button_init();
-	  lcd_init();
-	  ds3231_init();
-	  setTimer2(50);
+void system_init()
+{
+  HAL_GPIO_WritePin(OUTPUT_Y0_GPIO_Port, OUTPUT_Y0_Pin, 0);
+  HAL_GPIO_WritePin(OUTPUT_Y1_GPIO_Port, OUTPUT_Y1_Pin, 0);
+  HAL_GPIO_WritePin(DEBUG_LED_GPIO_Port, DEBUG_LED_Pin, 0);
+  timer_init();
+  led7_init();
+  button_init();
+  lcd_init();
+  ds3231_init();
+  setTimer2(50);
 }
 
-void test_LedDebug(){
-	count_led_debug = (count_led_debug + 1)%20;
-	if(count_led_debug == 0){
-		HAL_GPIO_TogglePin(DEBUG_LED_GPIO_Port, DEBUG_LED_Pin);
-	}
+void test_LedDebug()
+{
+  count_led_debug = (count_led_debug + 1) % 20;
+  if (count_led_debug == 0)
+  {
+    HAL_GPIO_TogglePin(DEBUG_LED_GPIO_Port, DEBUG_LED_Pin);
+  }
 }
 
-void test_7seg(){
-	led7_SetDigit(0, 0, 0);
-	led7_SetDigit(5, 1, 0);
-	led7_SetDigit(4, 2, 0);
-	led7_SetDigit(7, 3, 0);
+void test_7seg()
+{
+  led7_SetDigit(0, 0, 0);
+  led7_SetDigit(5, 1, 0);
+  led7_SetDigit(4, 2, 0);
+  led7_SetDigit(7, 3, 0);
 }
-void test_button(){
-	for(int i = 0; i < 16; i++){
-		if(button_count[i] == 1){
-			led7_SetDigit(i/10, 2, 0);
-			led7_SetDigit(i%10, 3, 0);
-		}
-	}
+void test_button()
+{
+  for (int i = 0; i < 16; i++)
+  {
+    if (button_count[i] == 1)
+    {
+      led7_SetDigit(i / 10, 2, 0);
+      led7_SetDigit(i % 10, 3, 0);
+    }
+  }
 }
 
-void updateTime(){
-	ds3231_Write(ADDRESS_YEAR, YEAR);
-	ds3231_Write(ADDRESS_MONTH, MONTH);
-	ds3231_Write(ADDRESS_DATE, DATE);
-	ds3231_Write(ADDRESS_DAY, DAY);
-	ds3231_Write(ADDRESS_HOUR, HOUR);
-	ds3231_Write(ADDRESS_MIN, MIN);
-	ds3231_Write(ADDRESS_SEC, SEC);
-}
+// void updateTime(){
+// 	ds3231_Write(ADDRESS_YEAR, 23);
+// 	ds3231_Write(ADDRESS_MONTH, 10);
+// 	ds3231_Write(ADDRESS_DATE, 15);
+// 	ds3231_Write(ADDRESS_DAY, 6);
+// 	ds3231_Write(ADDRESS_HOUR, 25);
+// 	ds3231_Write(ADDRESS_MIN, 30);
+// 	ds3231_Write(ADDRESS_SEC, 35);
+// }
 
 uint8_t isButtonUp()
 {
-    if (button_count[3] == 1)
-        return 1;
-    else
-        return 0;
+  if (button_count[3] == 1)
+    return 1;
+  else
+    return 0;
 }
 uint8_t isButtonDown()
 {
-    if (button_count[7] == 1)
-        return 1;
-    else
-        return 0;
+  if (button_count[7] == 1)
+    return 1;
+  else
+    return 0;
 }
 /* USER CODE END 4 */
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -246,14 +254,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ * @retval None
+ */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */

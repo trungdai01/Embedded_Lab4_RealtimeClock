@@ -1,1 +1,12 @@
-../Core/Src/global.c:3:6:blinky	4	static
+../Core/Src/global.c:68:6:init_value	4	static
+../Core/Src/global.c:122:6:init_counter	4	static
+../Core/Src/global.c:133:6:init_counter_alarm	4	static
+../Core/Src/global.c:140:6:blinky	32	static
+../Core/Src/global.c:236:6:blinkyAlarm	32	static
+../Core/Src/global.c:264:6:displayTime	24	static
+../Core/Src/global.c:275:6:updateTime	8	static
+../Core/Src/global.c:286:6:displayAlarm	24	static
+../Core/Src/global.c:293:6:updateAlarm	8	static
+../Core/Src/global.c:300:6:alert	8	static
+../Core/Src/global.c:314:6:resetSaveTime	16	static
+../Core/Src/global.c:322:6:writeSaveTime	8	static

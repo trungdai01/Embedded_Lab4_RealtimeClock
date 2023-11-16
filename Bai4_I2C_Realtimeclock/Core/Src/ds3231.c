@@ -7,9 +7,11 @@
 
 #include "ds3231.h"
 
-#define DS3231_ADDRESS 0x68<<1
+#define DS3231_ADDRESS 0x68 << 1
 
 uint8_t ds3231_buffer[7];
+// uint8_t ds3231_alarm_buf[3];
+uint8_t ds3231_alarm_buf[2];
 
 uint8_t ds3231_hours;
 uint8_t ds3231_min;
@@ -19,25 +21,38 @@ uint8_t ds3231_day;
 uint8_t ds3231_month;
 uint8_t ds3231_year;
 
-void ds3231_init(){
-	ds3231_buffer[0] = DEC2BCD(30); //second,	0011 0000
-	ds3231_buffer[1] = DEC2BCD(22); //minute,	0010 0010
-	ds3231_buffer[2] = DEC2BCD(21); //hour,		0010 0001
-	ds3231_buffer[3] = DEC2BCD(6);  //day,		0000 0110
-	ds3231_buffer[4] = DEC2BCD(15); //date,		0001 0101
-	ds3231_buffer[5] = DEC2BCD(9);  //month,	0000 1001
-	ds3231_buffer[6] = DEC2BCD(23); //year,		0010 0011
-	if(HAL_I2C_IsDeviceReady(&hi2c1, DS3231_ADDRESS, 3, 50) != HAL_OK){
-		while(1);
+uint8_t ds3231_alarm_hour;
+uint8_t ds3231_alarm_min;
+// uint8_t ds3231_alarm_sec;
+
+void ds3231_init()
+{
+	ds3231_buffer[0] = DEC2BCD(30); // second,	0011 0000
+	ds3231_buffer[1] = DEC2BCD(22); // minute,	0010 0010
+	ds3231_buffer[2] = DEC2BCD(21); // hour,		0010 0001
+	ds3231_buffer[3] = DEC2BCD(6);	// day,		0000 0110
+	ds3231_buffer[4] = DEC2BCD(15); // date,		0001 0101
+	ds3231_buffer[5] = DEC2BCD(9);	// month,	0000 1001
+	ds3231_buffer[6] = DEC2BCD(23); // year,		0010 0011
+
+	ds3231_alarm_buf[0] = DEC2BCD(0);
+	ds3231_alarm_buf[1] = DEC2BCD(0);
+	// ds3231_alarm_buf[2] = DEC2BCD(0);
+	if (HAL_I2C_IsDeviceReady(&hi2c1, DS3231_ADDRESS, 3, 50) != HAL_OK)
+	{
+		while (1)
+			;
 	};
 }
 
-void ds3231_Write(uint8_t address, uint8_t value){
+void ds3231_Write(uint8_t address, uint8_t value)
+{
 	uint8_t temp = DEC2BCD(value);
-	HAL_I2C_Mem_Write(&hi2c1, DS3231_ADDRESS, address, I2C_MEMADD_SIZE_8BIT, &temp, 1,10);
+	HAL_I2C_Mem_Write(&hi2c1, DS3231_ADDRESS, address, I2C_MEMADD_SIZE_8BIT, &temp, 1, 10);
 }
 
-void ds3231_ReadTime(){
+void ds3231_ReadTime()
+{
 	HAL_I2C_Mem_Read(&hi2c1, DS3231_ADDRESS, 0x00, I2C_MEMADD_SIZE_8BIT, ds3231_buffer, 7, 10);
 	ds3231_sec = BCD2DEC(ds3231_buffer[0]);
 	ds3231_min = BCD2DEC(ds3231_buffer[1]);
@@ -46,4 +61,12 @@ void ds3231_ReadTime(){
 	ds3231_date = BCD2DEC(ds3231_buffer[4]);
 	ds3231_month = BCD2DEC(ds3231_buffer[5]);
 	ds3231_year = BCD2DEC(ds3231_buffer[6]);
+}
+
+void ds3231_ReadAlarm(void)
+{
+	HAL_I2C_Mem_Read(&hi2c1, DS3231_ADDRESS, 0x08, I2C_MEMADD_SIZE_8BIT, ds3231_alarm_buf, 2, 10);
+	// ds3231_alarm_sec = BCD2DEC(ds3231_alarm_buf[0]);
+	ds3231_alarm_min = BCD2DEC(ds3231_alarm_buf[0]);
+	ds3231_alarm_hour = BCD2DEC(ds3231_alarm_buf[1]);
 }

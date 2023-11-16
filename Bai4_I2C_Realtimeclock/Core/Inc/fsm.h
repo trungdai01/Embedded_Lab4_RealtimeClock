@@ -4,7 +4,7 @@
  *  Created on: Nov 8, 2023
  *      Author: quoct
  */
-
+#pragma once
 #ifndef INC_FSM_H_
 #define INC_FSM_H_
 

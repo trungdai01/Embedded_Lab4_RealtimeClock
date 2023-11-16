@@ -1,6 +1,7 @@
 "./Core/Src/button.o"
 "./Core/Src/ds3231.o"
 "./Core/Src/fsm.o"
+"./Core/Src/fsm_alarm.o"
 "./Core/Src/fsmc.o"
 "./Core/Src/global.o"
 "./Core/Src/gpio.o"
