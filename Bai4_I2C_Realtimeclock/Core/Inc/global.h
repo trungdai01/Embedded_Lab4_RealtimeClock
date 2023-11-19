@@ -31,16 +31,16 @@
 #define INIT 0
 #define NORMAL 1
 
-#define HOUR	1
-#define MIN		2
-#define SEC		3
-#define DAY		4
-#define DATE	5
-#define MONTH	6
-#define YEAR	7
-#define HOUR_A  10
-#define MIN_A   11
-#define SEC_A   12
+#define HOUR 1
+#define MIN 2
+#define SEC 3
+#define DAY 4
+#define DATE 5
+#define MONTH 6
+#define YEAR 7
+#define HOUR_A 10
+#define MIN_A 11
+#define SEC_A 12
 
 extern int statusNORMAL_1;
 extern int statusNORMAL_2;

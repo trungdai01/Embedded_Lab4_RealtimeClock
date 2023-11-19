@@ -193,7 +193,7 @@ void fsm_clock()
         case NORMAL:
             if (button_count[12] == 1)
             {
-               saveTime[3] = 1;
+                saveTime[3] = 1;
             }
             break;
         default:

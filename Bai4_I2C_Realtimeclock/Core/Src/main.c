@@ -213,16 +213,6 @@ void test_button()
   }
 }
 
-// void updateTime(){
-// 	ds3231_Write(ADDRESS_YEAR, 23);
-// 	ds3231_Write(ADDRESS_MONTH, 10);
-// 	ds3231_Write(ADDRESS_DATE, 15);
-// 	ds3231_Write(ADDRESS_DAY, 6);
-// 	ds3231_Write(ADDRESS_HOUR, 25);
-// 	ds3231_Write(ADDRESS_MIN, 30);
-// 	ds3231_Write(ADDRESS_SEC, 35);
-// }
-
 uint8_t isButtonUp()
 {
   if (button_count[3] == 1)
