@@ -287,42 +287,42 @@ void alert(void)
     }
 }
 
-void resetSaveTime()
-{
-    for (int i = 0; i < 7; ++i)
-    {
-        saveTime[i] = 0;
-    }
-}
+// void resetSaveTime()
+// {
+//     for (int i = 0; i < 7; ++i)
+//     {
+//         saveTime[i] = 0;
+//     }
+// }
 
-void writeSaveTime()
-{
-    if (saveTime[0] == 1 || (counterHour != ds3231_hours))
-    {
-        ds3231_Write(ADDRESS_HOUR, counterHour);
-    }
-    if (saveTime[1] == 1 || (counterMin != ds3231_min))
-    {
-        ds3231_Write(ADDRESS_MIN, counterMin);
-    }
-    if (saveTime[2] == 1 || (counterSec != ds3231_sec))
-    {
-        ds3231_Write(ADDRESS_SEC, counterSec);
-    }
-    if (saveTime[3] == 1 || (counterDay != ds3231_day))
-    {
-        ds3231_Write(ADDRESS_DAY, counterDay);
-    }
-    if (saveTime[4] == 1 || (counterDate != ds3231_date))
-    {
-        ds3231_Write(ADDRESS_DATE, counterDate);
-    }
-    if (saveTime[5] == 1 || (counterMonth != ds3231_month))
-    {
-        ds3231_Write(ADDRESS_MONTH, counterMonth);
-    }
-    if (saveTime[6] == 1 || (counterYear != ds3231_year))
-    {
-        ds3231_Write(ADDRESS_YEAR, counterYear);
-    }
-}
+// void writeSaveTime()
+// {
+//     if (saveTime[0] == 1 || (counterHour != ds3231_hours))
+//     {
+//         ds3231_Write(ADDRESS_HOUR, counterHour);
+//     }
+//     if (saveTime[1] == 1 || (counterMin != ds3231_min))
+//     {
+//         ds3231_Write(ADDRESS_MIN, counterMin);
+//     }
+//     if (saveTime[2] == 1 || (counterSec != ds3231_sec))
+//     {
+//         ds3231_Write(ADDRESS_SEC, counterSec);
+//     }
+//     if (saveTime[3] == 1 || (counterDay != ds3231_day))
+//     {
+//         ds3231_Write(ADDRESS_DAY, counterDay);
+//     }
+//     if (saveTime[4] == 1 || (counterDate != ds3231_date))
+//     {
+//         ds3231_Write(ADDRESS_DATE, counterDate);
+//     }
+//     if (saveTime[5] == 1 || (counterMonth != ds3231_month))
+//     {
+//         ds3231_Write(ADDRESS_MONTH, counterMonth);
+//     }
+//     if (saveTime[6] == 1 || (counterYear != ds3231_year))
+//     {
+//         ds3231_Write(ADDRESS_YEAR, counterYear);
+//     }
+// }

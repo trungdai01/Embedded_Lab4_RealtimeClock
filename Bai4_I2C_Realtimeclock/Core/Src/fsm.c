@@ -60,7 +60,7 @@ void fsm_clock()
         case NORMAL:
             if (button_count[12] == 1)
             {
-                saveTime[0] = 1;
+                ds3231_Write(ADDRESS_HOUR, counterHour);
             }
             break;
         default:
@@ -105,7 +105,7 @@ void fsm_clock()
         case NORMAL:
             if (button_count[12] == 1)
             {
-                saveTime[1] = 1;
+                ds3231_Write(ADDRESS_MIN, counterMin);
             }
             break;
         default:
@@ -149,7 +149,7 @@ void fsm_clock()
         case NORMAL:
             if (button_count[12] == 1)
             {
-                saveTime[2] = 1;
+                ds3231_Write(ADDRESS_SEC, counterSec);
             }
             break;
         default:
@@ -193,7 +193,7 @@ void fsm_clock()
         case NORMAL:
             if (button_count[12] == 1)
             {
-                saveTime[3] = 1;
+                ds3231_Write(ADDRESS_DAY, counterDay);
             }
             break;
         default:
@@ -237,7 +237,7 @@ void fsm_clock()
         case NORMAL:
             if (button_count[12] == 1)
             {
-                saveTime[4] = 1;
+                ds3231_Write(ADDRESS_DATE, counterDate);
             }
             break;
         default:
@@ -281,7 +281,7 @@ void fsm_clock()
         case NORMAL:
             if (button_count[12] == 1)
             {
-                saveTime[5] = 1;
+                ds3231_Write(ADDRESS_MONTH, counterMonth);
             }
             break;
         default:
@@ -325,7 +325,7 @@ void fsm_clock()
         case NORMAL:
             if (button_count[12] == 1)
             {
-                saveTime[6] = 1;
+                ds3231_Write(ADDRESS_YEAR, counterYear);
             }
             break;
         default:
@@ -388,10 +388,10 @@ void fsm_clock()
     case MODE8:
         if (button_count[0] == 1)
         {
-            writeSaveTime();
+            // writeSaveTime();
             mode = MODE1;
             lcd_ShowIntNum(150, 130, counterYear, 2, YELLOW, BLACK, 24);
-            resetSaveTime();
+            // resetSaveTime();
         }
         break;
     default:

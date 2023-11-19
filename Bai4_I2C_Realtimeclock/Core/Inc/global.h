@@ -114,7 +114,7 @@ void displayAlarm();
 void updateTime();
 void updateAlarm();
 void alert();
-void resetSaveTime();
-void writeSaveTime();
+// void resetSaveTime();
+// void writeSaveTime();
 
 #endif /* INC_GLOBAL_H_ */
